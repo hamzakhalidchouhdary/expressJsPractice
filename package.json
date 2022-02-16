@@ -2,10 +2,10 @@
   "name": "expressjs",
   "version": "1.0.0",
   "description": "Node Js ExpressJs execrise..",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index"
+    "start": "nodemon server"
   },
   "author": "Hamza Khalid Chouhdary",
   "license": "ISC",

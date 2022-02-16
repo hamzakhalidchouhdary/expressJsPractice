@@ -3,8 +3,6 @@ const router = require('./routes');
 
 const PORT = 3000;
 
-app.use('/book', router.book);
-app.use('/author', router.author);
-app.use('/', router.root);
+app.use('/', router);
 
 app.listen(PORT, () => console.log(`App STARTED AT PORT : ${PORT}`));
