@@ -1,7 +1,8 @@
 const router = require('express').Router();
-const {V1Controllers} = require('../../controllers')
+const {V1Controllers} = require('../../controllers');
+const userAuthentication = require('./authentication');
 
-router.get('/', V1Controllers.book.all)
+router.get('/', userAuthentication , V1Controllers.book.all)
 router.post('/', V1Controllers.book.add)
 router.get('/:id', V1Controllers.book.get)
 router.put('/:id', V1Controllers.book.update)
