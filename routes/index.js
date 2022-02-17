@@ -1,10 +1,8 @@
 const router = require('express').Router();
-const book = require('./book');
-const author = require('./author');
-const root = require('./root')
+const V1Resourse = require('./V1');
+const V2Resourse = require('./V2');
 
-router.use('/book', book);
-router.use('/author', author);
-router.use('/', root);
+router.use('/v1', V1Resourse);
+router.use('/v2', V2Resourse);
 
-module.exports = router;
+module.exports = router

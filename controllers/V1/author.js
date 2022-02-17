@@ -1,6 +1,6 @@
 const all = (req, res) => {
   try {
-    res.json({"message" : "All Books"});
+    res.json({"message" : "All Author", "version" : "1"});
   } catch (error) {
     res.status(error.status || 500).send({
       "error": {
@@ -13,7 +13,7 @@ const all = (req, res) => {
 const get = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book found", "data" : {"book" : {"id" : params.id}}});
+    res.json({"message" : "Author found", "data" : {"author" : {"id" : params.id}}});
   } catch (error) {
     res.status(error.status || 500).send({
       "error": {
@@ -26,7 +26,7 @@ const get = (req, res) => {
 const add = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book added"});
+    res.json({"message" : "Author added"});
   } catch (error) {
     res.status(error.status || 500).send({
       "error": {
@@ -39,7 +39,7 @@ const add = (req, res) => {
 const update = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book updated"});
+    res.json({"message" : "Author updated"});
   } catch (error) {
     res.status(error.status || 500).send({
       "error": {
@@ -52,7 +52,7 @@ const update = (req, res) => {
 const remove = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book deleted"});
+    res.json({"message" : "Author deleted"});
   } catch (error) {
     res.status(error.status || 500).send({
       "error": {

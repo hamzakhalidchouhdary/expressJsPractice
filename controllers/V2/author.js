@@ -1,6 +1,6 @@
 const all = (req, res) => {
   try {
-    res.json({"message" : "All Author"});
+    res.json({"message" : "All Author", "version" : "2"});
   } catch (error) {
     res.status(error.status || 500).send({
       "error": {
