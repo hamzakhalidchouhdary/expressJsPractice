@@ -5,13 +5,15 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon server"
+    "dev": "nodemon server",
+    "start" : "node server"
   },
   "author": "Hamza Khalid Chouhdary",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.2",
     "http": "0.0.1-security",
+    "jsonwebtoken": "^8.5.1",
     "nodemon": "^2.0.15"
   }
 }

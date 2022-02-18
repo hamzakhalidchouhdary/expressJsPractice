@@ -1,9 +1,12 @@
-const userAuthentication = (req, res, next) => {
+const { decodeUserToken } = require("../../utiliti/userAuthentication")
+
+const tokenAuthentication = (req, res, next) => {
   try {
     const header = req.headers
     const token = header.authorization || null 
     if (token) {
-      console.log(token)
+      const user = decodeUserToken(token.split(' ')[1])
+      req.user = user
     } else {
       throw new Error('Missing Authentication Token')
     }
@@ -17,4 +20,4 @@ const userAuthentication = (req, res, next) => {
   }
 }
 
-module.exports = userAuthentication
+module.exports = tokenAuthentication
