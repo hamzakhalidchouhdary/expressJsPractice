@@ -1,6 +1,6 @@
-const { decodeUserToken } = require("../../utiliti/userAuthentication")
+const { decodeUserToken } = require("./userAuthentication")
 
-const tokenAuthentication = (req, res, next) => {
+const tokenAuthenticationV1 = (req, res, next) => {
   try {
     const header = req.headers
     const token = header.authorization || null 
@@ -20,4 +20,6 @@ const tokenAuthentication = (req, res, next) => {
   }
 }
 
-module.exports = tokenAuthentication
+module.exports = {
+  tokenAuthenticationV1
+}
