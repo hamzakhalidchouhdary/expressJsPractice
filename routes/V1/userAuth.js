@@ -1,22 +1,9 @@
-const { encodeUserToken } = require('../../utiliti/userAuthentication')
+const {V1Controllers} = require('../../controllers')
 
 const router = require('express').Router()
 
-router.all('/login', (req,res) => {
-  const userCredentials = req.body
-  const token = encodeUserToken(userCredentials)
-  res.status(200).json({
-    "message" : "LOGIN SUCCESSFULLY",
-    "token" : token
-  });
-})
-
-router.post('/join', (req,res) => {
-  res.send('USER CREATED')
-})
-
-router.post('/resetpassword', (req,res) => {
-  res.send('PASSWORD CHANGED')
-})
+router.post('/login', V1Controllers.userAuth.login)
+router.post('/join', V1Controllers.userAuth.join)
+router.post('/resetpassword', V1Controllers.userAuth.resetPassword)
 
 module.exports = router
