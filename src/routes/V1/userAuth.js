@@ -1,5 +1,4 @@
 const {V1Controllers} = require('../../controllers')
-
 const router = require('express').Router()
 
 router.post('/login', V1Controllers.userAuth.login)
