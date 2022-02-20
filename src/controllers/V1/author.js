@@ -1,12 +1,10 @@
+const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses");
+
 const all = (req, res) => {
   try {
     res.json({"message" : "All Author", "version" : "1"});
   } catch (error) {
-    res.status(error.status || 500).send({
-      "error": {
-        "message": error.message || "Internal Server Error",
-      },
-    });
+    sendError(error, res);
   }
 }
 
@@ -15,11 +13,7 @@ const get = (req, res) => {
     const params = req.params;
     res.json({"message" : "Author found", "data" : {"author" : {"id" : params.id}}});
   } catch (error) {
-    res.status(error.status || 500).send({
-      "error": {
-        "message": error.message || "Internal Server Error",
-      },
-    });
+    sendError(error, res);
   }
 }
 
@@ -28,11 +22,7 @@ const add = (req, res) => {
     const params = req.params;
     res.json({"message" : "Author added"});
   } catch (error) {
-    res.status(error.status || 500).send({
-      "error": {
-        "message": error.message || "Internal Server Error",
-      },
-    });
+    sendError(error, res);
   }
 }
 
@@ -41,11 +31,7 @@ const update = (req, res) => {
     const params = req.params;
     res.json({"message" : "Author updated"});
   } catch (error) {
-    res.status(error.status || 500).send({
-      "error": {
-        "message": error.message || "Internal Server Error",
-      },
-    });
+    sendError(error, res);
   }
 }
 
@@ -54,11 +40,7 @@ const remove = (req, res) => {
     const params = req.params;
     res.json({"message" : "Author deleted"});
   } catch (error) {
-    res.status(error.status || 500).send({
-      "error": {
-        "message": error.message || "Internal Server Error",
-      },
-    });
+    sendError(error, res);
   }
 }
 
