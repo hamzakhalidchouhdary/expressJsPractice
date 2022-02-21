@@ -1,11 +1,11 @@
 /* YOU ARE IN V1 ROUTER */
 const router = require('express').Router();
-const V1bookResourse = require('./book');
-const V1authorResourse = require('./author');
+const V1NoteResourse = require('./note');
+const V1UserResourse = require('./user');
 const V1AuthenticationResourse = require('./userAuth');
 
-router.use('/book', V1bookResourse);
-router.use('/author', V1authorResourse);
+router.use('/note', V1NoteResourse);
+router.use('/user', V1UserResourse);
 router.use('/auth', V1AuthenticationResourse)
 
 module.exports = router;

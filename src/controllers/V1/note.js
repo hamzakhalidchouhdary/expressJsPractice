@@ -2,7 +2,7 @@ const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses
 
 const all = (req, res) => {
   try {
-    res.json({"message" : "All Books", "version": "1"});
+    res.json({"message" : "All Notes", "version": "1"});
   } catch (error) {
     sendError(error, res);
   }
@@ -11,7 +11,7 @@ const all = (req, res) => {
 const get = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book found", "data" : {"book" : {"id" : params.id}}});
+    res.json({"message" : "Note found", "data" : {"note" : {"id" : params.id}}});
   } catch (error) {
     sendError(error, res);
   }
@@ -20,7 +20,7 @@ const get = (req, res) => {
 const add = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book added"});
+    res.json({"message" : "Note added"});
   } catch (error) {
     sendError(error, res);
   }
@@ -29,7 +29,7 @@ const add = (req, res) => {
 const update = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book updated"});
+    res.json({"message" : "Note updated"});
   } catch (error) {
     sendError(error, res);
   }
@@ -38,7 +38,7 @@ const update = (req, res) => {
 const remove = (req, res) => {
   try {
     const params = req.params;
-    res.json({"message" : "Book deleted"});
+    res.json({"message" : "Note deleted"});
   } catch (error) {
     sendError(error, res);
   }
