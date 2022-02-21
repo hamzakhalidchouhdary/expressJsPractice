@@ -21,8 +21,8 @@ const decodeUserToken = (token) => {
   try {
     user = jwt.verify(token, "12345")
   } catch (error) {
-    if (error.message.includes("expired")) throw new Error('Authentication Token Expired')
-    throw new Error(error.message)
+    if (error.message.includes("expired")) throw {message: 'Authentication Token Expired', status: 401}
+    throw error
   }
   return user;
 }

@@ -1,3 +1,4 @@
+const { sendErrorResponseV1: sendError } = require("./errorResponses")
 const { decodeUserToken } = require("./userAuthentication")
 
 const tokenAuthenticationV1 = (req, res, next) => {
@@ -8,15 +9,11 @@ const tokenAuthenticationV1 = (req, res, next) => {
       const user = decodeUserToken(token.split(' ')[1])
       req.user = user
     } else {
-      throw new Error('Missing Authentication Token')
+      throw {message: 'Missing Authentication Token', status: 400}
     }
     next()
   } catch (error) {
-    res.status(error.status || 400).send({
-      "error": {
-        "message": error.message || "Not Allowed",
-      },
-    });
+    sendError(error, res)
   }
 }
 
