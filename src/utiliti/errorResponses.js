@@ -5,3 +5,7 @@ exports.sendErrorResponseV1 = (error, res) => {
     },
   });
 }
+
+exports.sendParamMissingError = (error, res) => {
+  res.status(error.status || 400).json(error);
+}
