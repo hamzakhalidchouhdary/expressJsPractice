@@ -19,8 +19,8 @@ const get = (req, res) => {
 
 const add = (req, res) => {
   try {
-    const params = req.params;
-    res.json({"message" : "Note added"});
+    const body = req.body;
+    res.json({"message" : "Note added", "data": body});
   } catch (error) {
     sendError(error, res);
   }
@@ -28,8 +28,9 @@ const add = (req, res) => {
 
 const update = (req, res) => {
   try {
-    const params = req.params;
-    res.json({"message" : "Note updated"});
+    const body = req.body;
+    const params = req.params
+    res.json({"message" : "Note updated", "id": params.id, "data": body});
   } catch (error) {
     sendError(error, res);
   }
