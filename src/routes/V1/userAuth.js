@@ -1,7 +1,7 @@
 const router = require('express').Router()
 const {V1Controllers: V1} = require('../../controllers')
 const { sendParamMissingError: throwError } = require('../../utiliti/errorResponses')
-const { loginValidationSchema, newUserSchema } = require('../../utiliti/validationSchemas/authSchemas')
+const { loginValidationSchema, newUserSchema, changePasswordScheme } = require('../../utiliti/validationSchemas/authSchemas')
 const { requestValidator } = require('../../utiliti/validationSchemas/requestValidator')
 
 router.post('/login', loginValidationSchema(), (req, res) => {
@@ -20,7 +20,14 @@ router.post('/join', newUserSchema(), (req, res) => {
     throwError(error, res)
   }
 })
-router.post('/resetpassword', V1.userAuth.resetPassword)
+router.post('/resetpassword', changePasswordScheme(), (req, res) => {
+  try{
+    requestValidator(req)
+    V1.userAuth.resetPassword(req, res)
+  } catch (error) {
+    throwError(error, res)
+  }
+})
 
 
 module.exports = router
