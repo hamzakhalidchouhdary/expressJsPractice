@@ -1,5 +1,5 @@
 const { V1Controllers: V1 } = require('../../controllers');
-const { sendErrorResponseV1: throwError } = require('../../utiliti/errorResponses');
+const { sendParamMissingError: throwError } = require('../../utiliti/errorResponses');
 const { noteItemSchema } = require('../../utiliti/validationSchemas/noteItemSchema');
 const { requestValidator } = require('../../utiliti/validationSchemas/requestValidator');
 const router = require('express').Router();
