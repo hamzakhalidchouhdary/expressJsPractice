@@ -6,7 +6,9 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon ./src/server",
-    "start": "node ./src/server"
+    "start": "node ./src/server",
+    "migrate": "knex migrate:latest --knexfile ./src/db/knexfile.js",
+    "seed": "knex seed:run --knexfile ./src/db/knexfile.js"
   },
   "author": "Hamza Khalid Chouhdary",
   "license": "ISC",
@@ -16,6 +18,8 @@
     "express-validator": "^6.14.0",
     "http": "0.0.1-security",
     "jsonwebtoken": "^8.5.1",
-    "nodemon": "^2.0.15"
+    "knex": "^1.0.3",
+    "nodemon": "^2.0.15",
+    "sqlite3": "^5.0.2"
   }
 }
