@@ -2,13 +2,18 @@ const knex = require('../db/config')
 
 const create = (data) => {
   try {
-
+    return new Promise((resolve, reject) => {
+      knex('users').
+      insert({...data}).
+      then(id => resolve(findById(id))).
+      catch(err => reject(err))
+    })
   } catch (err) {
     console.error(err.message)
   }
 }
 
-const find = () => {
+const all = () => {
     return new Promise((resolve, reject) => {
       knex('users').
       select().
@@ -46,8 +51,10 @@ const findByName = (fullName) => {
     catch(err => reject(err))
   }) 
 }
+
 module.exports = {
-  find,
+  create,
+  all,
   findById,
   findByUsername,
   findByName

@@ -1,11 +1,12 @@
 exports.up = function(knex) {
   try {
-    return knex.schema.createTable('users', (t) => {
-      t.increments('id');
-      t.string('full_name', 150).notNullable();
-      t.string('username', 20).notNullable();
-      t.string('password', 255).notNullable();
-      t.timestamps();
+    return knex.schema.createTable('users', (table) => {
+      table.increments('id').primary();
+      table.string('full_name', 150).notNullable();
+      table.string('username', 20).notNullable();
+      table.string('password', 255).notNullable();
+      table.timestamps()/*.defaultTo(knex.fn.now())*/;
+      table.unique('username');
     })
   } catch (err) {
     console.error('ERROR IN CREATING USERS TABLE')
@@ -14,7 +15,7 @@ exports.up = function(knex) {
 
 exports.down = function(knex) {
   try {
-    return knex.schema.dropTable('users')
+    return knex.schema.dropTableIfExists('users')
   } catch (err) {
     console.error('ERROR IN DROPING USERS TABLE')
   }
