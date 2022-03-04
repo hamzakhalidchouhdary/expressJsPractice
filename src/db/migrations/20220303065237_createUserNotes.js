@@ -4,7 +4,8 @@ exports.up = function(knex) {
       table.increments('id').primary();
       table.string('title', 150).notNullable().defaultTo('Untitled');
       table.integer('user_id').notNullable();
-      table.timestamps()/*.defaultTo(knex.fn.now())*/;
+      table.timestamp('created_at').defaultTo(knex.fn.now());
+      table.timestamp('updated_at').defaultTo(knex.fn.now());
       table.foreign('user_id').references('Users.id_in_users').
         onDelete('CASCADE').
         onUpdate('NO ACTION');
