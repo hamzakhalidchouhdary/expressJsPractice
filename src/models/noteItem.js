@@ -1,7 +1,7 @@
 const knex = require('../db/config')
 
-const tableName = 'notes'
-const attributesInResponse = ['id', 'title']
+const tableName = 'note_items'
+const attributesInResponse = ['id', 'content']
 
 const create = (data) => {
   try {
@@ -43,12 +43,12 @@ const findById = (id) => {
   }
 }
 
-const findByUser = (user_id) => {
+const findByNote = (note_id) => {
   try {
     return new Promise((resolve, reject) => {
       knex(tableName).
       select(attributesInResponse).
-      where({user_id}).
+      where({note_id}).
       then(res => resolve(res)).
       catch(err => reject(err))
     })
@@ -61,5 +61,5 @@ module.exports = {
   create,
   all,
   findById,
-  findByUser
+  findByNote
 }

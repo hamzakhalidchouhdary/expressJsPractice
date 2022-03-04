@@ -6,8 +6,9 @@ exports.seed = (knex) => {
       // INSERT new entries
       return knex('notes').insert([
         {title: 'test note', user_id: '1'},
-        {title: 'test note', user_id: '3'},
-        {title: '', user_id: '50'}
+        {title: 'test note', user_id: '2'},
+        {title: 'test note', user_id: '2'},
+        {title: 'test note', user_id: '2'}
       ]);
     })
     .catch(err => {throw err})
