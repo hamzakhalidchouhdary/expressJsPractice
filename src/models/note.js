@@ -1,9 +1,12 @@
 const knex = require('../db/config')
 
+const tableName = 'notes'
+const attributesInResponse = ['id', 'title']
+
 const create = (data) => {
   try {
     return new Promise((resolve, reject) => {
-      knex('notes').
+      knex(tableName).
       insert({...data}).
       then(id => resolve(findById(id))).
       catch(err => reject(err))
@@ -16,8 +19,8 @@ const create = (data) => {
 const all = () => {
   try {
     return new Promise((resolve, reject) => {
-      knex('notes').
-      select().
+      knex(tableName).
+      select(attributesInResponse).
       then(res => resolve(res)).
       catch(err => reject(err))
     })
@@ -29,8 +32,8 @@ const all = () => {
 const findById = (id) => {
   try {
     return new Promise((resolve, reject) => {
-      knex('notes').
-      select().
+      knex(tableName).
+      select(attributesInResponse).
       where({id}).
       then(res => resolve(res)).
       catch(err => reject(err))
@@ -43,9 +46,9 @@ const findById = (id) => {
 const findByUser = (user_id) => {
   try {
     return new Promise((resolve, reject) => {
-      knex('notes').
-      select().
-      where('user_id', user_id).
+      knex(tableName).
+      select(attributesInResponse).
+      where({user_id}).
       then(res => resolve(res)).
       catch(err => reject(err))
     })
