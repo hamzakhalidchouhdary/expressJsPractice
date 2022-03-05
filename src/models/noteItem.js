@@ -1,7 +1,7 @@
 const knex = require('../db/config')
 
 const tableName = 'note_items'
-const attributesInResponse = ['id', 'content']
+const columns = ['id', 'content']
 
 const create = (data) => {
   try {
@@ -20,7 +20,7 @@ const all = () => {
   try {
     return new Promise((resolve, reject) => {
       knex(tableName).
-      select(attributesInResponse).
+      select(columns).
       then(res => resolve(res)).
       catch(err => reject(err))
     })
@@ -33,7 +33,7 @@ const findById = (id) => {
   try {
     return new Promise((resolve, reject) => {
       knex(tableName).
-      select(attributesInResponse).
+      select(columns).
       where({id}).
       then(res => resolve(res)).
       catch(err => reject(err))
@@ -47,8 +47,38 @@ const findByNote = (note_id) => {
   try {
     return new Promise((resolve, reject) => {
       knex(tableName).
-      select(attributesInResponse).
+      select(columns).
       where({note_id}).
+      then(res => resolve(res)).
+      catch(err => reject(err))
+    })
+  } catch (err) {
+    console.error(err.message)
+  }
+}
+
+const update = (id, data) => {
+  try {
+    data['updated_at'] = knex.fn.now()
+    return new Promise((resolve, reject) => {
+      knex(tableName).
+      where({id}).
+      update(data).
+      then(res => resolve(res)).
+      catch(err => reject(err))
+    })
+  } catch (err) {
+    console.error(err.message)
+  }
+}
+
+const remove = (id) => {
+  try {
+    return new Promise((resolve, reject) => {
+      knex(tableName).
+      select().
+      where({id}).
+      del().
       then(res => resolve(res)).
       catch(err => reject(err))
     })
@@ -61,5 +91,7 @@ module.exports = {
   create,
   all,
   findById,
-  findByNote
+  findByNote,
+  update,
+  remove
 }

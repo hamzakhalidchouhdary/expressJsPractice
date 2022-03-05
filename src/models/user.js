@@ -1,7 +1,7 @@
 const knex = require('../db/config')
 
 const tableName = 'users'
-const attributesInResponse = ['id', 'full_name', 'username']
+const columns = ['id', 'full_name', 'username']
 
 const create = (data) => {
   try {
@@ -19,7 +19,7 @@ const create = (data) => {
 const all = () => {
     return new Promise((resolve, reject) => {
       knex(tableName).
-      select(attributesInResponse).
+      select(columns).
       then(res => resolve(res)).
       catch(err => reject(err))
     }) 
@@ -28,7 +28,7 @@ const all = () => {
 const findById = (id) => {
   return new Promise((resolve, reject) => {
     knex(tableName).
-    select(attributesInResponse).
+    select(columns).
     where({id}).
     then(res => resolve(res)).
     catch(err => reject(err))
@@ -38,7 +38,7 @@ const findById = (id) => {
 const findByUsername = (username) => {
   return new Promise((resolve, reject) => {
     knex(tableName).
-    select(attributesInResponse).
+    select(columns).
     where({username}).
     then(res => resolve(res)).
     catch(err => reject(err))
@@ -48,11 +48,41 @@ const findByUsername = (username) => {
 const findByName = (fullName) => {
   return new Promise((resolve, reject) => {
     knex(tableName).
-    select(attributesInResponse).
+    select(columns).
     whereILike('full_name', fullName).
     then(res => resolve(res)).
     catch(err => reject(err))
   }) 
+}
+
+const update = (id, data) => {
+  try {
+    data['updated_at'] = knex.fn.now()
+    return new Promise((resolve, reject) => {
+      knex(tableName).
+      where({id}).
+      update(data).
+      then(res => resolve(res)).
+      catch(err => reject(err))
+    })
+  } catch (err) {
+    console.error(err.message)
+  }
+}
+
+const remove = (id) => {
+  try {
+    return new Promise((resolve, reject) => {
+      knex(tableName).
+      select().
+      where({id}).
+      del().
+      then(res => resolve(res)).
+      catch(err => reject(err))
+    })
+  } catch (err) {
+    console.error(err.message)
+  }
 }
 
 module.exports = {
@@ -60,5 +90,7 @@ module.exports = {
   all,
   findById,
   findByUsername,
-  findByName
+  findByName,
+  update,
+  remove
 }
