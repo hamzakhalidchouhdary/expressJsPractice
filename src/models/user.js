@@ -25,10 +25,10 @@ const all = () => {
     }) 
 }
 
-const getPassword = (username) => {
+const getForLogin = (username) => {
   return new Promise((resolve, reject) => {
     knex(tableName).
-    select('password').
+    select().
     where({username}).
     then(res => resolve(res)).
     catch(err => reject(err))
@@ -98,7 +98,7 @@ const remove = (id) => {
 module.exports = {
   create,
   all,
-  getPassword,
+  getForLogin,
   findById,
   findByUsername,
   findByName,
