@@ -25,10 +25,11 @@ const all = () => {
     }) 
 }
 
-const getPassword = () => {
+const getPassword = (username) => {
   return new Promise((resolve, reject) => {
     knex(tableName).
     select('password').
+    where({username})
     then(res => resolve(res)).
     catch(err => reject(err))
   }) 
