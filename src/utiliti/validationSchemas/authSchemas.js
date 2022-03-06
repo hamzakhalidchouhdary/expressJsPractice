@@ -10,8 +10,7 @@ const loginValidationSchema = () => {
     notEmpty().withMessage('cannot be null'),
     body('password').
     exists().withMessage('required').
-    notEmpty().withMessage('can not be empty').
-    isLength({min : passwordSize}).withMessage(`min length ${passwordSize}`)
+    notEmpty().withMessage('can not be empty')
   ]
 }
 

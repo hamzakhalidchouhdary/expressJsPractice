@@ -1,21 +1,25 @@
 const { encodeUserToken } = require("../../utiliti/userAuthentication");
 const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses");
+const User = require('../../models/user')
 
-const validateUser = ({username, password}) => {
-  if (username === 'hamzakhalidchouhdary' && password === '123456789012345') return 
-  throw {message: 'invalid username or password', status: 401}
-}
 const login = (req, res) => {
-  try {
-    const userCredentials = req.body
-    validateUser(userCredentials);
-    const token = encodeUserToken(userCredentials)
-    res.status(200).json({
-      "message" : "LOGIN SUCCESSFULLY....",
-      "token" : token
-    });
+  try{
+    const {username, password} = req.body
+    User.getForLogin(username).
+    then(r => {
+      if (r[0]['password'] === password) {
+        const token = encodeUserToken({id: r[0]['id']})
+        res.status(200).json({
+          "message" : "LOGIN SUCCESSFULLY....",
+          "token" : token
+        });
+      } else {
+        throw {message: 'invalid username or password', status: 401}
+      }    
+    }).
+    catch(err => {sendError(err, res)})
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
   }
 }
 

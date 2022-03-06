@@ -2,7 +2,7 @@ const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses
 
 const all = (req, res) => {
   try {
-    res.json({"message" : "All Notes", "version": "1"});
+    const {user} = req;
   } catch (error) {
     sendError(error, res);
   }
