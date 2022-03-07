@@ -2,7 +2,7 @@ const { body } = require('express-validator')
 
 const noteItemSchema = () => {
   return [
-    body('item').
+    body('content').
     exists().withMessage('required').
     notEmpty().withMessage('can not be null')
   ]
