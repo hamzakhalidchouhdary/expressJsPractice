@@ -17,7 +17,7 @@ router.post('/', noteItemSchema(), (req, res) => {
 router.put('/:id', noteItemSchema(), (req, res) => {
   try{
     requestValidator(req)
-    V1.noteItem.add(req, res)
+    V1.noteItem.update(req, res)
   } catch (error) {
     throwError(error, res)
   }
