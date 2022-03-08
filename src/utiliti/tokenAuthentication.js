@@ -9,6 +9,7 @@ const tokenAuthenticationV1 = async (req, res, next) => {
     if (token) {
       const {id} = decodeUserToken(token.split(' ')[1])
       const user = await User.findById(id)
+      if (!user[0]) throw {message: 'user not find', status: 401}
       req.user = user[0]
     } else {
       throw {message: 'Missing Authentication Token', status: 400}

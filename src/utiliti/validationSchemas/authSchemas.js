@@ -1,4 +1,5 @@
 const { body } = require('express-validator');
+const User = require('../../models/user')
 const passwordSize = 10;
 const usernameRegExp = /^[a-zA-Z0-9_]+$/;
 const passwordRegExp = new RegExp(`(^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])?)|((?=.*?[A-Z])(?=.*?[a-z]{1,})(?=.*?[0-9])?(?=.*?[#?!@$%^&*-]))).{${passwordSize},}$`);
@@ -47,9 +48,10 @@ const userSchema = () => {
     body('username').
     exists().optional().withMessage('required').
     notEmpty().optional().withMessage('cannot be null').
-    custom(value => {
+    custom(async value => {
       if (!usernameRegExp.test(value)) throw 'Invaild username'
-      if (value === 'hamzakhalidchouhdary') throw 'username already in use';
+      user = await User.findByUsername(value)
+      if (user[0]) throw 'username already in use'
       return true
     })
   ]
