@@ -1,4 +1,5 @@
 const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses");
+const User = require("../../models/user");
 
 const all = (req, res) => {
   try {
@@ -10,10 +11,13 @@ const all = (req, res) => {
 
 const get = (req, res) => {
   try {
-    const params = req.params;
-    res.json({"message" : "User found", "data" : {"user" : {"id" : params.id}}});
+    const {id} = req.params
+    User.findById(id).
+    then(user => res.status(200).json(user[0])).
+    catch(err => sendError(err, res))
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
+    // sendError(error, res);
   }
 }
 
@@ -28,19 +32,26 @@ const add = (req, res) => {
 
 const update = (req, res) => {
   try {
-    const params = req.params;
-    res.json({"message" : "User updated"});
+    const {user} = req;
+    const {username, fullName: full_name} = req.body
+    User.update(user['id'], {username, full_name}).
+    then(status => res.status(200).json(status)).
+    catch(err => sendError(err, res))
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
+    // sendError(error, res);
   }
 }
 
 const remove = (req, res) => {
   try {
-    const params = req.params;
-    res.json({"message" : "User deleted"});
+    const {user} = req
+    User.remove(user['id']).
+    then(status => res.status(200).json(status)).
+    catch(err => sendError(err, res))
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
+    // sendError(error, res);
   }
 }
 

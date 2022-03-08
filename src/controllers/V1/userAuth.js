@@ -7,6 +7,7 @@ const login = (req, res) => {
     const {username, password} = req.body
     User.getForLogin(username).
     then(r => {
+      if (!r[0]) throw {message: 'user not find', status: 401}
       if (r[0]['password'] === password) {
         const token = encodeUserToken({id: r[0]['id']})
         res.status(200).json({
