@@ -1,48 +1,45 @@
 const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses");
 const Note = require('../../models/note')
-const NoteItem = require('../../models/noteItem')
-
-const getNoteItems = (note) => {
-  try{
-    return new Promise((resolve, reject) => {
-      NoteItem.findByNote(note['id']).then(items => {
-        note['items'] = items
-        resolve(note)
-      }).catch(err => reject(err))
-    })
-  } catch (err) { console.error(err.message) }
-}
+const { getAllUserNotes, getAUserNote } = require("./helper");
 
 const all = (req, res) => {
-  const {user} = req;
-  Note.findByUser(user['id']).
-  then(notes => Promise.all(notes.map(getNoteItems))).
-  then(notes => res.status(200).json(notes)).
-  catch(err => sendError(err, res))
+  try{
+    const {user} = req;
+    getAllUserNotes(user['id']).then(userNotes => {
+      res.status(200).
+      json(userNotes)
+    }).catch(err => sendError(err, res))
+  } catch (err) {
+    console.error(err)
+    sendError({}, res)
+  }
 }
 
 const get = (req, res) => {
   try {
     const {user} = req
     const {id} = req.params;
-    Note.findByUser(user['id']).
-    then(notes => Promise.all(notes.filter(note => {return note.id == id}).map(getNoteItems))).
-    then(notesWithItems => res.status(200).json(notesWithItems)).
-    catch(err => sendError(err, res))
-  } catch (err) { console.error(err.message) }
+    getAUserNote(user['id'], id).
+    then(note => {
+      res.status(200).json(note)
+    }).catch(err => sendError(err, res))
+  } catch (err) { 
+    console.error(err.message)
+    sendError({}, res) 
+  }
 }
 
 const add = (req, res) => {
   try {
     const {user} = req
     const {title} = req.body;
-    const user_id = user['id']
-    Note.create({title, user_id}).
+    Note.create({title, "user_id": user['id']}).
     then(newNote => {res.status(201).
-      json({message: 'note created', data: newNote})
+      json({message: 'note created', data: newNote[0]})
     }).catch(err => sendError(err, res))
   } catch (error) {
     console.error(error)
+    sendError({}, res)
   }
 }
 
@@ -51,12 +48,16 @@ const update = (req, res) => {
     const {user} = req
     const {title} = req.body;
     const {id} = req.params
-    Note.update(id, {title}).
-    then(updatedNote => {res.status(200).
-      json({message: 'note updated', data: updatedNote})
+    getAUserNote(user['id'], id).
+    then(r => {
+      Note.update(id, {title}).
+      then(updatedNote => {res.status(200).
+        json({message: 'note updated', data: updatedNote})
+      })
     }).catch(err => sendError(err, res))
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
+    sendError({}, res);
   }
 }
 
@@ -65,12 +66,15 @@ const remove = (req, res) => {
     const {user} = req
     const {title} = req.body;
     const {id} = req.params
-    Note.remove(id,).
-    then(status => {res.status(200).
-      json({message: 'note deleted', data: status})
+    getAUserNote(user['id'], id).then(r => {
+      Note.remove(id).
+      then(status => {res.status(200).
+        json({message: 'note deleted', data: status})
+      })
     }).catch(err => sendError(err, res))
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
+    sendError({}, res);
   }
 }
 

@@ -7,8 +7,7 @@ const login = (req, res) => {
     const {username, password} = req.body
     User.getForLogin(username).
     then(r => {
-      if (!r[0]) throw {message: 'user not find', status: 401}
-      if (r[0]['password'] === password) {
+      if (r[0]?.password === password) {
         const token = encodeUserToken({id: r[0]['id']})
         res.status(200).json({
           "message" : "LOGIN SUCCESSFULLY....",
@@ -21,14 +20,21 @@ const login = (req, res) => {
     catch(err => {sendError(err, res)})
   } catch (error) {
     console.error(error)
+    sendError({}, res)
   }
 }
 
 const join = (req,res) => {
   try {
-    res.send('USER CREATED')
+    const {username, password, fullName: full_name} = req.body
+    User.create({username, password, full_name}).
+    then(user => {
+      const token = encodeUserToken({"id" : user[0]['id']})
+      res.status(201).json({"message":"USER CREATED", token})
+    }).catch(err => sendError(err, res))
   } catch (error) {
-    sendError(error, res);
+    console.error(error)
+    sendError({}, res);
   }
 }
 
