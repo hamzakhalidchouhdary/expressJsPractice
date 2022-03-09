@@ -3,7 +3,7 @@ const User = require("../../models/user");
 
 const all = (req, res) => {
   try {
-    res.json({"user" : req.user, "version" : "1"});
+    res.json({"user" : req.user});
   } catch (error) {
     sendError(error, res);
   }
@@ -17,16 +17,7 @@ const get = (req, res) => {
     catch(err => sendError(err, res))
   } catch (error) {
     console.error(error)
-    // sendError(error, res);
-  }
-}
-
-const add = (req, res) => {
-  try {
-    const params = req.params;
-    res.json({"message" : "User added"});
-  } catch (error) {
-    sendError(error, res);
+    sendError({}, res);
   }
 }
 
@@ -39,7 +30,7 @@ const update = (req, res) => {
     catch(err => sendError(err, res))
   } catch (error) {
     console.error(error)
-    // sendError(error, res);
+    sendError({}, res);
   }
 }
 
@@ -51,14 +42,13 @@ const remove = (req, res) => {
     catch(err => sendError(err, res))
   } catch (error) {
     console.error(error)
-    // sendError(error, res);
+    sendError({}, res);
   }
 }
 
 module.exports = {
   all,
   get,
-  add,
   update,
   remove,
 }

@@ -6,7 +6,7 @@ const { requestValidator } = require('../../utiliti/validationSchemas/requestVal
 
 router.get('/', V1.user.all)
 router.get('/:id', V1.user.get)
-router.post('/', V1.user.add)
+router.delete('/', V1.user.remove)
 router.put('/', userSchema(), (req, res) => {
   try {
     requestValidator(req)
@@ -15,6 +15,5 @@ router.put('/', userSchema(), (req, res) => {
     throwError(error, res)
   }
 })
-router.delete('/', V1.user.remove)
 
 module.exports = router;

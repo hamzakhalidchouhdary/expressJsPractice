@@ -1,34 +1,51 @@
 const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses")
 const Note = require('../../models/note')
 const NoteItem = require('../../models/noteItem');
-const { status } = require("express/lib/response");
+const { getAUserNote } = require("./helper");
+
+const getAllUserNoteItems = (userId, noteId) => {
+  try{
+    return new Promise((resolve, reject) => {
+      getAUserNote(userId, noteId).
+      then(userNote => resolve(userNote.items)).
+      catch(reject)
+    })
+  } catch (err) { throw err}
+}
+
+const getAUserNoteItem = (userId, noteId, itemId) => {
+  try {
+    return new Promise((resolve, reject) => {
+      getAllUserNoteItems(userId, noteId).
+      then(items => {
+        const requestedItem = items.filter(item => item.id == itemId) || []
+        requestedItem[0] && resolve(requestedItem[0])
+        reject({"message": "not found", status: 404})
+      }).catch(reject)
+    })
+  } catch (err) { throw err }
+}
 
 const all = (req, res) => {
   try{
     const {noteId, user} = req;
-    Note.findByUser(user['id']).
-    then(notes => notes.filter(note => {return note['id'] == noteId})).
-    then(note => NoteItem.findByNote(note[0]['id'])).
+    getAllUserNoteItems(user['id'], noteId).
     then(items =>  res.json({
         'data': items
       })
-    ).
-    catch(err => sendError(err, res))
+    ).catch(err => sendError(err, res))
   } catch (error) {
     console.error(error)
-      sendError({}, res);
-    }
+    sendError({}, res);
+  }
 }
 const get = (req, res) => {
   try{
     const {noteId, user} = req;
     const {id} = req.params
-    Note.findByUser(user['id']).
-    then(notes => notes.filter(note => {return note['id'] == noteId})).
-    then(note => NoteItem.findByNote(note[0]['id'])).
-    then(items => items.filter(item => {return item['id'] == id})).
+    getAUserNoteItem(user['id'], noteId, id).
     then(item =>  res.json({
-        'item': item[0]
+        'item': item
     })).
     catch(err => sendError(err, res))
   } catch (error) {
@@ -48,10 +65,14 @@ const add = (req, res) => {
 }
 const update = (req, res) => {
   try{
+    const {user, noteId} = req
     const {id} = req.params;
     const {content} = req.body
-    NoteItem.update(id, {content}).
-    then(status => res.status(200).json(status || null)).
+    getAUserNoteItem(user['id'], noteId, id).
+    then(r =>  {
+      NoteItem.update(id, {content}).
+      then(status => res.status(200).json(status || null))
+    }).
     catch(err => sendError(err, res))
   } catch (error) {
       sendError(error, res);
@@ -59,9 +80,13 @@ const update = (req, res) => {
 }
 const remove = (req, res) => {
   try{
+    const {user, noteId} = req
     const {id} = req.params;
-    NoteItem.remove(id).
-    then(status => res.status(200).json(status)).
+    getAUserNoteItem(user['id'], noteId, id)
+    .then(r => {
+      NoteItem.remove(id).
+      then(status => res.status(200).json(status))
+    }).
     catch(err => sendError(err, res))
   } catch (error) {
       sendError(error, res);
