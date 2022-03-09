@@ -4,6 +4,13 @@ const passwordSize = 10;
 const usernameRegExp = /^[a-zA-Z0-9_]+$/;
 const passwordRegExp = new RegExp(`(^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])?)|((?=.*?[A-Z])(?=.*?[a-z]{1,})(?=.*?[0-9])?(?=.*?[#?!@$%^&*-]))).{${passwordSize},}$`);
 
+const validateUsername = async (username) => {
+  if (!usernameRegExp.test(username)) throw 'Invaild username'
+  const user = await User.findByUsername(username)
+  if (user[0]) throw 'username already in use'
+  return true
+}
+
 const loginValidationSchema = () => {
   return [
     body('username').
@@ -20,11 +27,10 @@ const newUserSchema = () => {
     body('username').
     exists().withMessage('required').
     notEmpty().withMessage('cannot be null').
-    custom(value => {
-      if (!usernameRegExp.test(value)) throw 'Invaild username'
-      if (value === 'hamzakhalidchouhdary') throw 'username already in use';
-      return true
-    }),
+    custom(validateUsername),
+    body('fullName').
+    exists().withMessage('required').
+    notEmpty().withMessage('cannot be null'),
     body('password').
     exists().withMessage('required').
     notEmpty().withMessage('cannot be null').
@@ -48,12 +54,7 @@ const userSchema = () => {
     body('username').
     exists().optional().withMessage('required').
     notEmpty().optional().withMessage('cannot be null').
-    custom(async value => {
-      if (!usernameRegExp.test(value)) throw 'Invaild username'
-      user = await User.findByUsername(value)
-      if (user[0]) throw 'username already in use'
-      return true
-    })
+    custom(validateUsername)
   ]
 }
 
