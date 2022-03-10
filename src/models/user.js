@@ -40,7 +40,7 @@ const findById = (id) => {
     knex(tableName).
     select(columns).
     where({id}).
-    then(res => resolve(res)).
+    then(res => resolve(res[0] || {})).
     catch(err => reject(err))
   }) 
 }
@@ -50,7 +50,7 @@ const findByUsername = (username) => {
     knex(tableName).
     select(columns).
     where({username}).
-    then(res => resolve(res)).
+    then(res => resolve(res[0] || {})).
     catch(err => reject(err))
   }) 
 }
@@ -60,7 +60,7 @@ const findByName = (fullName) => {
     knex(tableName).
     select(columns).
     whereILike('full_name', fullName).
-    then(res => resolve(res)).
+    then(res => resolve(res[0] || {})).
     catch(err => reject(err))
   }) 
 }
