@@ -30,7 +30,7 @@ const getForLogin = (username) => {
     knex(tableName).
     select().
     where({username}).
-    then(res => resolve(res)).
+    then(res => resolve(res[0])).
     catch(err => reject(err))
   }) 
 }
