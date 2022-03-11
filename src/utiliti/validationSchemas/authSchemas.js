@@ -7,7 +7,7 @@ const passwordRegExp = new RegExp(`(^((?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?
 const validateUsername = async (username) => {
   if (!usernameRegExp.test(username)) throw 'Invaild username'
   const user = await User.findByUsername(username)
-  if (user[0]) throw 'username already in use'
+  if (user) throw 'username already in use'
   return true
 }
 

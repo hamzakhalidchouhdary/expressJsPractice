@@ -1,38 +1,12 @@
 const { sendErrorResponseV1: sendError } = require("../../utiliti/errorResponses")
-const Note = require('../../models/note')
 const NoteItem = require('../../models/noteItem');
-const { getAUserNote } = require("./helper");
-
-const getAllUserNoteItems = (userId, noteId) => {
-  try{
-    return new Promise((resolve, reject) => {
-      getAUserNote(userId, noteId).
-      then(userNote => resolve(userNote.items)).
-      catch(reject)
-    })
-  } catch (err) { throw err}
-}
-
-const getAUserNoteItem = (userId, noteId, itemId) => {
-  try {
-    return new Promise((resolve, reject) => {
-      getAllUserNoteItems(userId, noteId).
-      then(items => {
-        const requestedItem = items.filter(item => item.id == itemId) || []
-        requestedItem[0] && resolve(requestedItem[0])
-        reject({"message": "not found", status: 404})
-      }).catch(reject)
-    })
-  } catch (err) { throw err }
-}
+const { getAUserNoteItem, getAllUserNoteItems } = require("./helper");
 
 const all = (req, res) => {
   try{
     const {noteId, user} = req;
     getAllUserNoteItems(user['id'], noteId).
-    then(items =>  res.json({
-        'data': items
-      })
+    then(items =>  res.json(items)
     ).catch(err => sendError(err, res))
   } catch (error) {
     console.error(error)
@@ -44,9 +18,7 @@ const get = (req, res) => {
     const {noteId, user} = req;
     const {id} = req.params
     getAUserNoteItem(user['id'], noteId, id).
-    then(item =>  res.json({
-        'item': item
-    })).
+    then(item =>  res.json(item)).
     catch(err => sendError(err, res))
   } catch (error) {
       sendError(error, res);
