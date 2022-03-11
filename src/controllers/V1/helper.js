@@ -28,8 +28,8 @@ const getAUserNote = (userId, noteId) => {
     return new Promise((resolve, reject) => {
       getAllUserNotes(userId).
       then(notes => {
-        const requestedNote = notes.filter(note => {return note.id == noteId}) || false
-        requestedNote[0] ? resolve(requestedNote[0]) : reject({"message" : "not found", status: 401})
+        const requestedNote = notes.find(note => {return note.id == noteId}) || false
+        requestedNote ? resolve(requestedNote) : reject({"message" : "not found", status: 404})
       }).catch(err => {
         console.error(err)
         reject({})
@@ -38,7 +38,32 @@ const getAUserNote = (userId, noteId) => {
   } catch (err) { throw err }
 }
 
+const getAllUserNoteItems = (userId, noteId) => {
+  try{
+    return new Promise((resolve, reject) => {
+      getAUserNote(userId, noteId).
+      then(userNote => resolve(userNote.items)).
+      catch(reject)
+    })
+  } catch (err) { throw err}
+}
+
+const getAUserNoteItem = (userId, noteId, itemId) => {
+  try {
+    return new Promise((resolve, reject) => {
+      getAllUserNoteItems(userId, noteId).
+      then(items => {
+        const requestedItem = items.find(item => item.id == itemId) || false
+        requestedItem && resolve(requestedItem)
+        reject({"message": "not found", status: 404})
+      }).catch(reject)
+    })
+  } catch (err) { throw err }
+}
+
 module.exports = {
+  getAUserNoteItem,
+  getAllUserNoteItems,
   getAUserNote,
   getAllUserNotes
 }
