@@ -4,10 +4,12 @@ const NoteItem = require('../../models/noteItem');
 const getNoteItems = (note) => {
   try{
     return new Promise((resolve, reject) => {
-      NoteItem.findByNote(note['id']).then(noteItems => {
-        note['items'] = noteItems
-        resolve(note)
-      }).catch(err => reject(err))
+      NoteItem.findByNote(note['id']).
+        then(noteItems => {
+          note['items'] = noteItems
+          resolve(note)
+        }).
+        catch(err => reject(err))
     })
   } catch (err) { throw err }
 }
