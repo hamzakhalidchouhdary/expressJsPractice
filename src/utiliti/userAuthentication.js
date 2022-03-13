@@ -1,29 +1,25 @@
-const jwt = require("jsonwebtoken")
-const JWT_SECRET = process.env.TOKEN_KEY
+const User = require("../models/user")
+const { sendErrorResponseV1: sendError } = require("./errorResponses")
+const { decodeUserToken } = require("./tokenAuthentication")
 
-const encodeUserToken = (userCredentials) => {
+const tokenAuthenticationV1 = async (req, res, next) => {
   try {
-    return jwt.sign(
-      userCredentials,
-      JWT_SECRET,
-      { expiresIn: "2h"}
-    );
+    const header = req.headers
+    const token = header.authorization || null 
+    if (token) {
+      const {id} = decodeUserToken(token.split(' ')[1])
+      const user = await User.findById(id)
+      if (!user) throw {message: 'user not find', status: 401}
+      req.user = user
+    } else {
+      throw {message: 'Missing Authentication Token', status: 400}
+    }
+    next()
   } catch (error) {
-    console.error(error.message)
-    return null
-  }
-}
-
-const decodeUserToken = (token) => {
-  try {
-    return jwt.verify(token, JWT_SECRET)
-  } catch (error) {
-    if (error.message.includes("expired")) throw {message: 'Authentication Token Expired', status: 401}
-    throw error
+    sendError(error, res)
   }
 }
 
 module.exports = {
-  encodeUserToken,
-  decodeUserToken
+  tokenAuthenticationV1
 }

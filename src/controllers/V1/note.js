@@ -34,7 +34,8 @@ const add = (req, res) => {
     const {user} = req
     const {title} = req.body;
     Note.create({title, "user_id": user['id']}).
-    then(newNote => {res.status(201).
+    then(newNote => {
+      res.status(201).
       json({message: 'note created', data: newNote[0]})
     }).catch(err => sendError(err, res))
   } catch (error) {
