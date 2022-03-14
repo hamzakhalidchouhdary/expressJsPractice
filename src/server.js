@@ -20,3 +20,5 @@ app.use((req, res) => { // IN CASE NO MATCH FOUND
  })
 
 app.listen(PORT, () => console.log(`App STARTED AT PORT : ${PORT}`));
+
+module.exports = app
