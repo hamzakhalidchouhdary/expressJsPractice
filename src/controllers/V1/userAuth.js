@@ -8,16 +8,14 @@ const login = (req, res) => {
     const {username, password} = req.body
     User.getForLogin(username).
     then(async(user) => {
-      const isMatched = await verifyPassword(user?.password, password)
-      if (isMatched) {
-        const token = encodeUserToken({id: user['id']})
-        res.status(200).json({
+      console.log(user)
+      if (!user) throw {message: 'invalid username or password', status: 401}
+      await verifyPassword(user?.password, password) && res.status(200)
+        .json({
           "message" : "LOGIN SUCCESSFULLY....",
-          "token" : token
+          "token" : encodeUserToken({id: user['id']})
         });
-      } else {
-        throw {message: 'invalid username or password', status: 401}
-      }    
+      throw {message: 'invalid username or password', status: 401} 
     }).
     catch(err => {sendError(err, res)})
   } catch (error) {
